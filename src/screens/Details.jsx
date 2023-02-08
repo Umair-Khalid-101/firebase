@@ -1,11 +1,12 @@
 import { View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 
 const Details = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Text>Details</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
