@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -11,7 +12,7 @@ const Home = () => {
         style={styles.button}
         // onPress={() => navigation.navigate("Details")}
       >
-        <Text style={styles.btntext}>Home</Text>
+        <MaterialCommunityIcons name="plus" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -23,14 +24,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    paddingBottom: 20,
   },
   button: {
     backgroundColor: "blue",
-    width: 150,
-    height: 40,
-    borderRadius: 75,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: "auto",
+    alignSelf: "flex-end",
+    marginRight: 10,
   },
   btntext: {
     color: "white",
