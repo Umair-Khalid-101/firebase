@@ -5,7 +5,7 @@ export const colors = {
   background: "#FFF2F2",
 };
 
-export const fireBaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyBuurHpBQyQ_vgoH4JJzFUdPYraxOER9Ek",
   authDomain: "first-b3e29.firebaseapp.com",
   projectId: "first-b3e29",
