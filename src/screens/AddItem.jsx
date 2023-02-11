@@ -9,19 +9,13 @@ import {
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm, Controller } from "react-hook-form";
-import { initializeApp } from "@firebase/app";
-import { getFirestore, collection, addDoc } from "@firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
-import { firebaseConfig } from "../constants";
 import { colors } from "../constants";
+import { addDoc, db, collection } from "../firebase";
 
 export default function AddItem() {
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
-  // Initialize Cloud Firestore and get a reference to the service
-  const db = getFirestore(app);
-
+  const navigation = useNavigation();
   const {
     handleSubmit,
     control,
@@ -38,6 +32,7 @@ export default function AddItem() {
         email: data.email,
       });
       console.log("Document written with ID: ", docRef.id);
+      navigation.navigate("Details");
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -75,6 +70,12 @@ export default function AddItem() {
           onPress={handleSubmit(onSubmit)}
         >
           <Text style={styles.buttonText}>Add Valet</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Details")}
+        >
+          <Text style={styles.buttonText}>View Valets</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
