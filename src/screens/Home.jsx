@@ -4,13 +4,15 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import { colors } from "../constants";
+
 const Home = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        // onPress={() => navigation.navigate("Details")}
+        onPress={() => navigation.navigate("Add")}
       >
         <MaterialCommunityIcons name="plus" size={28} color="white" />
       </TouchableOpacity>
@@ -25,9 +27,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingBottom: 20,
+    backgroundColor: colors.background,
   },
   button: {
-    backgroundColor: "blue",
+    backgroundColor: colors.primary,
     width: 70,
     height: 70,
     borderRadius: 35,
