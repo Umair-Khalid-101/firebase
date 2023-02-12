@@ -12,7 +12,14 @@ import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { colors } from "../constants";
-import { getDocs, collection, db, doc, setDoc, updateDoc } from "../firebase";
+import {
+  getDocs,
+  collection,
+  db,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "../firebase";
 
 const Details = () => {
   const [data, setData] = useState([]);
@@ -55,6 +62,15 @@ const Details = () => {
     Alert.alert("Updated!");
   };
 
+  //DELETE DATA
+  const handleDelete = async (id) => {
+    let updatedData = data.filter((item) => {
+      return item.id !== id;
+    });
+    setData(updatedData);
+    await deleteDoc(doc(db, "valet", id));
+  };
+
   return (
     <>
       {!isLoading && (
@@ -63,7 +79,7 @@ const Details = () => {
           <View style={styles.list}>
             <Text style={styles.title}>Name</Text>
             <Text style={styles.title}>Email</Text>
-            <Text style={styles.title}>Status</Text>
+            <Text style={styles.title}>Actions</Text>
           </View>
           <FlatList
             data={data}
@@ -72,25 +88,62 @@ const Details = () => {
                 <Text style={styles.text}>{item.name}</Text>
                 <Text style={styles.text}>{item.email}</Text>
                 {item.isChecked ? (
-                  <Pressable
-                    onPress={() => handleCheck(item.id, item.isChecked)}
-                  >
-                    <MaterialCommunityIcons
-                      name="check-circle"
-                      size={28}
-                      color={colors.primary}
-                    />
-                  </Pressable>
+                  <View style={styles.actions}>
+                    <Pressable
+                      onPress={() => handleCheck(item.id, item.isChecked)}
+                    >
+                      <MaterialCommunityIcons
+                        name="check-circle"
+                        size={28}
+                        color={colors.primary}
+                      />
+                    </Pressable>
+                    <Pressable
+                      onPress={() =>
+                        Alert.alert(
+                          "Confirm Delete",
+                          `Do you want to delete ${item.name}`,
+                          [
+                            {
+                              text: "Delete",
+                              onPress: () => handleDelete(item.id),
+                            },
+                            {
+                              text: "Cancel",
+                              onPress: () => {},
+                            },
+                          ]
+                        )
+                      }
+                    >
+                      <MaterialCommunityIcons
+                        name="delete"
+                        size={28}
+                        color={colors.primary}
+                      />
+                    </Pressable>
+                  </View>
                 ) : (
-                  <Pressable
-                    onPress={() => handleCheck(item.id, item.isChecked)}
-                  >
-                    <MaterialCommunityIcons
-                      name="check-circle-outline"
-                      size={28}
-                      color={colors.primary}
-                    />
-                  </Pressable>
+                  <View style={styles.actions}>
+                    <Pressable
+                      onPress={() => handleCheck(item.id, item.isChecked)}
+                    >
+                      <MaterialCommunityIcons
+                        name="check-circle-outline"
+                        size={28}
+                        color={colors.primary}
+                      />
+                    </Pressable>
+                    <Pressable
+                      onPress={() => handleCheck(item.id, item.isChecked)}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete"
+                        size={28}
+                        color={colors.primary}
+                      />
+                    </Pressable>
+                  </View>
                 )}
               </View>
             )}
@@ -110,6 +163,10 @@ const Details = () => {
 export default Details;
 
 const styles = StyleSheet.create({
+  actions: {
+    display: "flex",
+    flexDirection: "row",
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,

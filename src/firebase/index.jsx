@@ -7,6 +7,7 @@ import {
   doc,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from "@firebase/firestore";
 
 import { firebaseConfig } from "../constants";
@@ -17,4 +18,14 @@ const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-export { app, db, collection, addDoc, getDocs, doc, setDoc, updateDoc };
+export {
+  app,
+  db,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+};
