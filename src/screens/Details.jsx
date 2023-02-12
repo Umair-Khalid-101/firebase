@@ -4,17 +4,21 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  Pressable,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { colors } from "../constants";
-import { getDocs, collection, db } from "../firebase";
+import { getDocs, collection, db, doc, setDoc, updateDoc } from "../firebase";
 
 const Details = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // GET DATA
   const getValets = async () => {
     setData([]);
     const myData = [];
@@ -26,6 +30,7 @@ const Details = () => {
         id: doc.id,
         name: doc.data().name,
         email: doc.data().email,
+        isChecked: doc.data().isChecked,
       });
     });
     setData(myData);
@@ -36,6 +41,20 @@ const Details = () => {
     getValets();
   }, []);
 
+  //UPDATE DATA
+  const handleCheck = async (id, isChecked) => {
+    let updatedData = data.map((item) => {
+      return item.id === id ? { ...item, isChecked: !isChecked } : item;
+    });
+    setData(updatedData);
+    const valetRef = doc(db, "valet", id);
+    // Set the "capital" field of the city 'DC'
+    await updateDoc(valetRef, {
+      isChecked: !isChecked,
+    });
+    Alert.alert("Updated!");
+  };
+
   return (
     <>
       {!isLoading && (
@@ -44,6 +63,7 @@ const Details = () => {
           <View style={styles.list}>
             <Text style={styles.title}>Name</Text>
             <Text style={styles.title}>Email</Text>
+            <Text style={styles.title}>Status</Text>
           </View>
           <FlatList
             data={data}
@@ -51,6 +71,27 @@ const Details = () => {
               <View style={styles.list}>
                 <Text style={styles.text}>{item.name}</Text>
                 <Text style={styles.text}>{item.email}</Text>
+                {item.isChecked ? (
+                  <Pressable
+                    onPress={() => handleCheck(item.id, item.isChecked)}
+                  >
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={28}
+                      color={colors.primary}
+                    />
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    onPress={() => handleCheck(item.id, item.isChecked)}
+                  >
+                    <MaterialCommunityIcons
+                      name="check-circle-outline"
+                      size={28}
+                      color={colors.primary}
+                    />
+                  </Pressable>
+                )}
               </View>
             )}
             keyExtractor={(item) => item.id}
@@ -78,6 +119,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
+    marginTop: "4%",
   },
   text: {
     color: colors.secondary,

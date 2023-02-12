@@ -30,6 +30,7 @@ export default function AddItem() {
       const docRef = await addDoc(collection(db, "valet"), {
         name: data.name,
         email: data.email,
+        isChecked: false,
       });
       console.log("Document written with ID: ", docRef.id);
       navigation.navigate("Details");
